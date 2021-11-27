@@ -1,0 +1,267 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="back_btn" color="white" routerLink='/index/history'>
+        <ion-icon name="arrow-back"></ion-icon> &nbsp; back
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="item?.REQ_STATUS =='1'" slot="end" color="danger"  (click)="cancelRequest(item?.REQ_REQUESTOR_CODE,item?.REQ_CODE)">
+        cancel Request
+      </ion-button>
+      <ion-button *ngIf="item?.REQ_STATUS =='2'" slot="end" color="warning"  >
+        Request Accepted
+      </ion-button>
+      <ion-button *ngIf="item?.REQ_STATUS =='3'" slot="end" color="warning"  >
+        Package In-Transit
+      </ion-button>
+      <ion-button *ngIf="item?.REQ_STATUS =='4'" slot="end" color="warning" (click)="completeRequest(item?.REQ_REQUESTOR_CODE,item?.REQ_CODE)">
+        End Trip
+      </ion-button>
+      <ion-button *ngIf="item?.REQ_STATUS =='5'" slot="end" color="success"  >
+        Trip Completed
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding page">
+
+  <div class="login">
+
+
+
+
+    <div *ngIf="request_type == '1'">
+
+      <div class="signup">
+        <p class="bigtxt"><span class="quest_small"> Driver <span class="primary_color">Details</span>. </span></p>
+        <p class="bigtxt_subtext"><span class="quest_small" *ngIf="driverdetails?.URQ_DRIVERNAME == ''">These are the details of the driver.</span></p>
+        <p *ngIf="!item?.REQ_DRIVER_PHONE" class="bigtxt_subtext"><span class="quest_small" *ngIf="driverdetails?.URQ_DRIVERNAME != ''">Searching for a driver. Will alert you.</span> <br><br> <br><br></p>
+      </div>
+
+      <ion-row *ngIf="driverdetails?.URQ_DRIVERNAME == ''">
+        <img  class="logo_loading" src="assets/imgs/eclipse.svg" alt="logo">
+      </ion-row>
+
+      <ion-row *ngIf="item?.REQ_DRIVER_PHONE">
+        <br><br>
+        <ion-col size="12" class="">
+
+          <ion-item>
+            <ion-label class="secondary_color">Driver's Name : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_NAME}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Driver's Phone : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_PHONE}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Car Type : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_CAR}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Company Name : <span class="tertiary_color quest_small"> {{item?.REQ_ARTISAN_COMP_NAME}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+
+        <br><br>
+        <br><br>
+        <br><br>
+      </ion-row>
+
+      <div class="signup">
+        <p class="bigtxt"><span class="quest_small"> Requst <span class="primary_color">Details</span>. </span></p>
+        <p class="bigtxt_subtext"><span class="quest_small">These are your request Details</span></p>
+      </div>
+
+      <ion-row>
+        <p class="bigtxt total_text"><span class="quest_small"> Locations <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">From : <span class="tertiary_color quest_small"> {{item?.REQ_LOCATION_FROM}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">To : <span class="tertiary_color quest_small"> {{item?.REQ_LOCATION}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <p class="bigtxt total_text margin_top"><span class="quest_small"> Items you are moving <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-row>
+            <ion-col size="8" >
+              <ion-label class="float_left secondary_color"> Item </ion-label>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label class="float_left secondary_color"> Quantity </ion-label>
+            </ion-col>
+            <ion-col size="1">
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let entry of selecteditems">
+            <ion-col size="10" >
+              <span class="float_left quest_small">{{entry.name}}</span>
+            </ion-col>
+            <ion-col size="2">
+              <span class="float_left quest_small">{{entry.quantity}}</span>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <p class="bigtxt total_text margin_top"><span class="quest_small"> Additional Information <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Pickup Date : <span class="tertiary_color quest_small">{{item?.REQ_PICKUP_DATE}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Pickup Time : <span class="tertiary_color quest_small">{{item?.REQ_PICKUP_TIME}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Truck Type : <span class="tertiary_color quest_small">{{item?.REQ_TRUCK_NAME}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <div class="descrip_text">
+            <ion-label class="secondary_color">Description :</ion-label> <br>
+            <span class="tertiary_color quest_small"> {{item?.REQ_DESCRIPTION}} </span>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </div>
+
+
+
+    <div *ngIf="request_type == '2'">
+
+      <div class="signup">
+        <p class="bigtxt"><span class="quest_small"> Driver <span class="primary_color">Details</span>. </span></p>
+        <p class="bigtxt_subtext"><span class="quest_small" *ngIf="driverdetails?.URQ_DRIVERNAME == ''">These are the details of the driver.</span></p>
+        <p *ngIf="!item?.REQ_DRIVER_PHONE" class="bigtxt_subtext"><span class="quest_small" *ngIf="driverdetails?.URQ_DRIVERNAME != ''">Searching for a driver. Will alert you.</span>  <br><br> <br><br></p>
+      </div>
+      
+      <ion-row *ngIf="driverdetails?.URQ_DRIVERNAME == ''">
+        <img  class="logo_loading" src="assets/imgs/eclipse.svg" alt="logo">
+      </ion-row>
+
+      <ion-row *ngIf="item?.REQ_DRIVER_PHONE">
+        <br><br>
+        <ion-col size="12" class="">
+
+          <ion-item>
+            <ion-label class="secondary_color">Driver's Name : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_NAME}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Driver's Phone : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_PHONE}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Car Type : <span class="tertiary_color quest_small"> {{item?.REQ_DRIVER_CAR}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Company Name : <span class="tertiary_color quest_small"> {{item?.REQ_ARTISAN_COMP_NAME}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+
+        <br><br>
+        <br><br>
+        <br><br>
+      </ion-row>
+
+      <div class="signup">
+        <p class="bigtxt"><span class="quest_small"> Requst <span class="primary_color">Details</span>. </span></p>
+        <p class="bigtxt_subtext"><span class="quest_small">These are your request Details</span></p>
+      </div>
+
+      <ion-row>
+        <p class="bigtxt total_text"><span class="quest_small"> Locations <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Location : <span class="tertiary_color quest_small"> {{item?.REQ_LOCATION}} </span></ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <p class="bigtxt total_text margin_top"><span class="quest_small"> Vehicles you requested for <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-row>
+            <ion-col size="8" >
+              <ion-label class="float_left secondary_color"> Vehicle </ion-label>
+            </ion-col>
+            <ion-col size="3">
+              <ion-label class="float_left secondary_color"> Quantity </ion-label>
+            </ion-col>
+            <ion-col size="1">
+            </ion-col>
+          </ion-row>
+          
+          <ion-row *ngFor="let entry of selectedvehicles">
+            <ion-col size="10" >
+              <span class="float_left quest_small">{{entry.truck_name}}</span>
+            </ion-col>
+            <ion-col size="2">
+              <span class="float_left quest_small">{{entry.truck_quantity}}</span>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <p class="bigtxt total_text margin_top"><span class="quest_small"> Additional Information <span class="primary_color"></span></span></p>
+        <br><br>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Start Date : <span class="tertiary_color quest_small">{{item?.REQ_START_DATE}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Start Time : <span class="tertiary_color quest_small">{{item?.REQ_START_TIME}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <ion-item>
+            <ion-label class="secondary_color">Amount Total : <span class="tertiary_color quest_small">{{item?.REQ_TOTAL_AMOUNT}}</span></ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12" class="">
+          <div class="descrip_text">
+            <ion-label class="secondary_color">Description :</ion-label> <br>
+            <span class="tertiary_color quest_small"> {{item?.REQ_DESCRIPTION}} </span>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </div>
+
+
+
+  </div>
+
+
+  </ion-content>

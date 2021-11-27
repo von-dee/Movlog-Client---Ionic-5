@@ -1,0 +1,7 @@
+{
+  "name": "movlog.dev",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
